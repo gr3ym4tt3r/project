@@ -33,6 +33,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print('[!] Exitting...')
 
+# Test code so i wont forget
 #for links in soup.findAll('link')[1:]:
 #   currentLinks.append(links)
 #   if links in currentLinks:
