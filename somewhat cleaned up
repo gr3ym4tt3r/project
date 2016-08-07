@@ -17,18 +17,21 @@ def hashed(x):
     return md5(x.content).hexdigest()
 
 if __name__ == "__main__":
-    print('[+] Checking Top Hat...')
+    print('[+] Checking Top Hat...\n\t[+] Ctrl+C to exit')
     currentCheck = '33cc562fa5964d59de2d21743b3d5c9e'
-    while True:
-        response = get('http://forum.top-hat-sec.com/index.php', params=payload) #still need to figure out how to login so we can post in chat
-        soup = BeautifulSoup(response.content, 'html.parser')
-        if currentCheck == hashed(response):
-            print('[+] There are no new posts!')
-        else:
-            print('[+] There\'s a new post!')
-            currentCheck = hashed(response)
-        sleep(5) # 5 seconds just a test. will be checking every 15 minutes?
-        
+    try:
+        while True:
+            response = get('http://forum.top-hat-sec.com/index.php', params=payload) #still need to figure out how to login so we can post in chat
+            soup = BeautifulSoup(response.content, 'html.parser')
+            if currentCheck == hashed(response):
+                print('[+] There are no new posts!')
+            else:
+                print('[+] There\'s a new post!')
+                currentCheck = hashed(response)
+            sleep(5) # 5 seconds just a test. will be checking every 15 minutes?
+    except KeyboardInterrupt:
+        print('[!] Exitting...')
+
 #for links in soup.findAll('link')[1:]:
 #   currentLinks.append(links)
 #   if links in currentLinks:
