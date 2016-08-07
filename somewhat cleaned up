@@ -29,6 +29,7 @@ if __name__ == "__main__":
                 print('[+] There\'s a new post!')
                 currentCheck = hashed(response)
             sleep(5) # 5 seconds just a test. will be checking every 15 minutes?
+                    # 900 seconds 15 minute checks
     except KeyboardInterrupt:
         print('[!] Exitting...')
 
