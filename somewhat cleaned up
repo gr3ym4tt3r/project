@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from hashlib import md5
 from time import sleep
 
+# might not even need this
 currentLinks = []
 currentPost = []
 currentCategories = []
@@ -27,3 +28,16 @@ if __name__ == "__main__":
             print('[+] There\'s a new post!')
             currentCheck = hashed(response)
         sleep(5) # 5 seconds just a test. will be checking every 15 minutes?
+        
+#for links in soup.findAll('link')[1:]:
+#   currentLinks.append(links)
+#   if links in currentLinks:
+#        print('[+] Click here to view: {}'.format(links.text))
+#for posts in soup.findAll('title')[1:]:
+#    currentPost.append(posts)
+#   if posts in currentPost:
+#        print('{}'.format(posts.text))
+#for category in soup.findAll('category'):
+#    currentCategories.append(category)
+
+#print links, posts, category
