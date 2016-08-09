@@ -6,6 +6,15 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+payload = {
+    'action' : '.xml',
+    'type' : 'rss'
+}
+
+currentLinks = []
+currentPost = []
+currentCategories = []
+
 def loggingIn(f):
     url = 'http://forum.top-hat-sec.com/index.php?action=login'
     browser = webdriver.Firefox()
@@ -16,15 +25,6 @@ def loggingIn(f):
     browser.find_element_by_id('shoutbox_message').send_keys(f, Keys.ENTER)
     sleep(2)
     browser.close()
-
-currentLinks = []
-currentPost = []
-currentCategories = []
-
-payload = {
-    'action' : '.xml',
-    'type' : 'rss'
-}
 
 def postchecking():
     for posts in soup.findAll('title')[1:]:
