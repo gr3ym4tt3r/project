@@ -6,14 +6,14 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+currentLinks = []
+currentPost = []
+currentCategories = []
+
 payload = {
     'action' : '.xml',
     'type' : 'rss'
 }
-
-currentLinks = []
-currentPost = []
-currentCategories = []
 
 def loggingIn(f):
     url = 'http://forum.top-hat-sec.com/index.php?action=login'
@@ -35,9 +35,7 @@ def postchecking():
         currentLinks.append(links)
         if links not in currentLinks:
             message = '/me minion: New post posted in {}! {}. Click here to view: {}'.format(category.text, posts.text, links.text)
-            print(message)
             loggingIn(message)
-            return links.text, category.text, posts.text
 
 def hashed(x):
     return md5(x.content).hexdigest()
@@ -54,6 +52,7 @@ if __name__ == "__main__":
             else:
                 print('\t[+] There\'s a new post!')
                 currentCheck = hashed(response)
+                print('\t\t[>] New hash: {}'.format(currentCheck))
                 postchecking()
             sleep(900)
     except KeyboardInterrupt:
