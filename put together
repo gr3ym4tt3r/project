@@ -47,7 +47,7 @@ if __name__ == "__main__":
     currentCheck = '33cc562fa5964d59de2d21743b3d5c9e'
     try:
         while True:
-            response = get('http://forum.top-hat-sec.com/index.php', params=payload) #still need to figure out how to login so we can post in chat
+            response = get('http://forum.top-hat-sec.com/index.php', params=payload)
             soup = BeautifulSoup(response.content, 'html.parser')
             if currentCheck == hashed(response):
                 print('\t[+] There are no new posts!')
@@ -55,7 +55,6 @@ if __name__ == "__main__":
                 print('\t[+] There\'s a new post!')
                 currentCheck = hashed(response)
                 postchecking()
-            sleep(900) # 5 seconds just a test. will be checking every 15 minutes?
-            # 900 seconds for 15 minutes
+            sleep(900)
     except KeyboardInterrupt:
         print('[!] Exiting...')
