@@ -1,0 +1,61 @@
+from __future__ import print_function
+from requests import get
+from bs4 import BeautifulSoup
+from hashlib import md5
+from time import sleep
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+def loggingIn(f):
+    url = 'http://forum.top-hat-sec.com/index.php?action=login'
+    browser = webdriver.Firefox()
+    browser.get(url)
+    browser.find_element_by_name('user').send_keys('username')
+    browser.find_element_by_name('passwrd').send_keys('password')
+    browser.find_element_by_id('frmLogin').submit()
+    browser.find_element_by_id('shoutbox_message').send_keys(f, Keys.ENTER)
+    sleep(2)
+    browser.close()
+
+currentLinks = []
+currentPost = []
+currentCategories = []
+
+payload = {
+    'action' : '.xml',
+    'type' : 'rss'
+}
+
+def postchecking():
+    for posts in soup.findAll('title')[1:]:
+        currentPost.append(posts)
+    for category in soup.findAll('category'):
+        currentCategories.append(category)
+    for links in soup.findAll('link')[1:]:
+        currentLinks.append(links)
+        if links not in currentLinks:
+            message = '/me minion: New post posted in {}! {}. Click here to view: {}'.format(category.text, posts.text, links.text)
+            print(message)
+            loggingIn(message)
+            return links.text, category.text, posts.text
+
+def hashed(x):
+    return md5(x.content).hexdigest()
+
+if __name__ == "__main__":
+    print('[+] Checking Top Hat...\n[+] Ctrl+C to exit')
+    currentCheck = '33cc562fa5964d59de2d21743b3d5c9e'
+    try:
+        while True:
+            response = get('http://forum.top-hat-sec.com/index.php', params=payload) #still need to figure out how to login so we can post in chat
+            soup = BeautifulSoup(response.content, 'html.parser')
+            if currentCheck == hashed(response):
+                print('\t[+] There are no new posts!')
+            else:
+                print('\t[+] There\'s a new post!')
+                currentCheck = hashed(response)
+                postchecking()
+            sleep(900) # 5 seconds just a test. will be checking every 15 minutes?
+            # 900 seconds for 15 minutes
+    except KeyboardInterrupt:
+        print('[!] Exiting...')
