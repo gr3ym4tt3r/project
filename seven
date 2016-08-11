@@ -1,0 +1,70 @@
+from __future__ import print_function
+from requests import get
+from bs4 import BeautifulSoup
+from hashlib import md5
+from time import sleep
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+# this is where the links/posts/categories are stored (currentLinks.appended())
+currentLinks = []
+currentPost = []
+currentCategories = []
+
+# this is for the get request. it's the same thing as http://forum.top-hat-sec.com/action=.xml;type=rss
+# but for requests, this is the payload used
+payload = {
+    'action' : '.xml',
+    'type' : 'rss'
+}
+
+# since I couldnt login via requests, doc recommended selenium
+# this opens up the browser, logs in, and submits the message for you. then closes it
+def loggingIn(f):
+    url = 'http://forum.top-hat-sec.com/index.php?action=login'
+    browser = webdriver.Firefox()
+    browser.get(url)
+    browser.find_element_by_name('user').send_keys('username')
+    browser.find_element_by_name('passwrd').send_keys('password')
+    browser.find_element_by_id('frmLogin').submit()
+    browser.find_element_by_id('shoutbox_message').send_keys(f, Keys.ENTER)
+    sleep(2)
+    browser.close()
+
+# this is what checks and stores the values. this is what im still working on to be more accurate
+# wasnt so accurate after the test post i did
+# still working on it but sends the message for selenium to type in
+def postchecking():
+    for posts in soup.findAll('title')[1:]:
+        currentPost.append(posts)
+    for category in soup.findAll('category'):
+        currentCategories.append(category)
+    for links in soup.findAll('link')[1:]:
+        currentLinks.append(links)
+        if links not in currentLinks:
+            message = '/me minion: New post posted in {}! {}. Click here to view: {}'.format(category.text, posts.text, links.text)
+            loggingIn(message)
+
+# generates the hash for the rss. this is how it tells if theres a new post or whatever
+def hashed(x):
+    return md5(x.content).hexdigest()
+
+if __name__ == "__main__":
+    print('[+] Checking Top Hat...\n[+] Ctrl+C to exit')
+    currentCheck = '33cc562fa5964d59de2d21743b3d5c9e'
+    try:
+        while True:
+        
+            # this is what scrapes the rss feed
+            response = get('http://forum.top-hat-sec.com/index.php', params=payload)
+            soup = BeautifulSoup(response.content, 'html.parser')
+            if currentCheck == hashed(response):
+                print('\t[+] There are no new posts!')
+            else:
+                print('\t[+] There\'s a new post!')
+                currentCheck = hashed(response)
+                print('\t\t[>] New hash: {}'.format(currentCheck))
+                postchecking()
+            sleep(900)
+    except KeyboardInterrupt:
+        print('[!] Exiting...')
