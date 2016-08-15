@@ -9,9 +9,9 @@ from twilio.rest import TwilioRestClient
 
 url = 'http://forum.top-hat-sec.com/index.php?action=login'
 
-ACCOUNT_SID = ''
-AUTH_TOKEN = ''
-client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
+sid = ''
+token = ''
+client = TwilioRestClient(sid, token)
 
 payload = {
     'action' : '.xml',
