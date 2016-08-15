@@ -18,11 +18,11 @@ payload = {
     'type' : 'rss'
 }
 
-def textMessage(contact)
+def textMessage(contact):
     client.messages.create(
-        to='2105294004',
-        from_='2105294004',
-        body=contact)
+        to = ' ',
+        from_ = ' ',
+        body = contact)
 
 def loggingIn(f):
     browser = webdriver.Firefox()
@@ -62,10 +62,10 @@ def hashed(x):
 
 if __name__ == "__main__":
     print('[+] Checking Top Hat...\n[+] Ctrl+C to exit')
-    currentCheck = 'fca7c2f1ab797ba94a5c01e379fff033'
+    currentCheck = 'c6509c6213cee3552a019fad7fa3ae47'
     try:
         while True:
-            response = get('http://forum.top-hat-sec.com/index.php', params=payload)
+            response = get('http://forum.top-hat-sec.com/index.php', params = payload)
             soup = BeautifulSoup(response.content, 'html.parser')
             if currentCheck == hashed(response):
                 print('\t[+] There are no new posts!')
@@ -74,6 +74,6 @@ if __name__ == "__main__":
                 currentCheck = hashed(response)
                 print('\t\t[>] New hash: {}'.format(currentCheck))
                 postchecking()
-            sleep(900)
+            sleep(300)
     except KeyboardInterrupt:
         print('[!] Exiting...')
