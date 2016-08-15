@@ -20,8 +20,8 @@ payload = {
 
 def textMessage(contact)
     client.messages.create(
-        to="2105294004",
-        from_="2105294004",
+        to='',
+        from_='',
         body=contact)
 
 def loggingIn(f):
