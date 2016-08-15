@@ -20,8 +20,8 @@ payload = {
 
 def textMessage(contact)
     client.messages.create(
-        to='',
-        from_='',
+        to='2105294004',
+        from_='2105294004',
         body=contact)
 
 def loggingIn(f):
@@ -30,7 +30,7 @@ def loggingIn(f):
     browser.find_element_by_name('user').send_keys('username')
     browser.find_element_by_name('passwrd').send_keys('password')
     browser.find_element_by_id('frmLogin').submit()
-    browser.find_element_by_id('shoutbox_message').send_keys(f, Keys.ENTER)
+    browser.find_element_by_id('shoutbox_message').send_keys('/me minion: {}'.format(f), Keys.ENTER)
     sleep(2)
     browser.close()
 
@@ -39,11 +39,11 @@ def postchecking():
         for message in soup.findAll('description')[1:2]:
             for link in soup.findAll('link')[1:2]:
                 for category in soup.findAll('category')[0:1]:
-                    responseMessage = '/me minion: New post in response to {}! {}.. Click here to view: {}'.format(
+                    responseMessage = 'New post in response to {}! {}.. Click here to view: {}'.format(
                         title.text.replace('Re: ', ''),
                         message.text.strip().replace('<br />', ' '),
                         link.text)
-                    postMessage = '/me minion: {} was posted in {}! {}... Click here to view: {}'.format(
+                    postMessage = '{} was posted in {}! {}... Click here to view: {}'.format(
                         title.text,
                         category.text,
                         message.text.strip().replace('<br />', ' '),
@@ -62,7 +62,7 @@ def hashed(x):
 
 if __name__ == "__main__":
     print('[+] Checking Top Hat...\n[+] Ctrl+C to exit')
-    currentCheck = 'c6509c6213cee3552a019fad7fa3ae47'
+    currentCheck = 'fca7c2f1ab797ba94a5c01e379fff033'
     try:
         while True:
             response = get('http://forum.top-hat-sec.com/index.php', params=payload)
