@@ -15,8 +15,8 @@ def loggingIn(f):
     url = 'http://forum.top-hat-sec.com/index.php?action=login'
     browser = webdriver.Firefox()
     browser.get(url)
-    browser.find_element_by_name('user').send_keys('ch3rn0byl')
-    browser.find_element_by_name('passwrd').send_keys('Passw0rd!')
+    browser.find_element_by_name('user').send_keys('user')
+    browser.find_element_by_name('passwrd').send_keys('password')
     browser.find_element_by_id('frmLogin').submit()
     browser.find_element_by_id('shoutbox_message').send_keys(f, Keys.ENTER)
     sleep(2)
