@@ -21,7 +21,7 @@ if __name__ == '__main__':
         print('[!] Uh-oh! {}'.format(error))
         exit()
     chdir('DefConPdfs')
-for links in soup.find_all('a'):
-    if 'pdf' in links.text:
-        print('[+] Saving: {}'.format(links.text))
-        downloadPdf(links.text)
+    for links in soup.find_all('a'):
+        if 'pdf' in links.text:
+            print('[+] Saving: {}'.format(links.text))
+            downloadPdf(links.text)
