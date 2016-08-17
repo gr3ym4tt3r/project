@@ -10,3 +10,14 @@ It also texts me with the new response that way I can get it to my phone. Mainly
 
 Eventually, I will add a function to post on a new member's introduction and welcome them because I'm too lazy to say hi myself. I also suck at hi's.  
 Thats it for now
+
+# Issues Fixed
+
+One of the issues I was having was my bot was including the html tags when someone would posts links or smiley faces or whatever. 
+For example: 
+  
+    ch3rn0byl minion: New post in response to Board of Shame! Board of shame. Tsk tsk&nbsp; <img src="http://forum.top-hat-sec.com/Smileys/default/cool.gif" alt="8&#41;" title="Cool" class="smiley" /> hehe <img src="http://forum.top-hat-sec.com/Smileys/default/smiley.gif" alt="&#58;&#41;" title="Smiley" class="smiley" />.. Click here to view   
+    
+That's obviously a no go because it looks ugly as hell. Finally figured out how to fix it and hopefully its done...  
+
+    ch3rn0byl minion: New post in response to Board of Shame! Board of shame. Tsk tsk hehe .. Click here to view
