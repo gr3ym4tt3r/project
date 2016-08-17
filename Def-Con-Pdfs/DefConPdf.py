@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 from requests import get
 from bs4 import BeautifulSoup
 from os import path, makedirs, chdir
