@@ -6,6 +6,8 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from twilio.rest import TwilioRestClient
+from re import sub
+from HTMLParser import HTMLParser
 
 url = 'http://forum.top-hat-sec.com/index.php?action=login'
 
@@ -18,11 +20,21 @@ payload = {
     'type' : 'rss'
 }
 
+numbers = [
+    ''
+]
+
+def htmlStrippa(message):
+    cleaned = sub('<(.*?)>', '', message).replace('&nbsp;', '')
+    html = HTMLParser()
+    return html.unescape(cleaned)
+
 def textMessage(contact):
-    client.messages.create(
-        to = ' ',
-        from_ = ' ',
-        body = contact)
+    for number in numbers:
+        client.messages.create(
+            to = number,
+            from_ = '',
+            body = contact)
 
 def loggingIn(f):
     browser = webdriver.Firefox()
@@ -41,21 +53,21 @@ def postchecking():
                 for category in soup.findAll('category')[0:1]:
                     responseMessage = 'New post in response to {}! {}.. Click here to view: {}'.format(
                         title.text.replace('Re: ', ''),
-                        message.text.strip().replace('<br />', ' '),
+                        message.text.strip(),
                         link.text)
                     postMessage = '{} was posted in {}! {}... Click here to view: {}'.format(
                         title.text,
                         category.text,
-                        message.text.strip().replace('<br />', ' '),
+                        message.text.strip(),
                         link.text)
                     if 'Re:' in title.text:
-                        loggingIn(responseMessage)
-                        textMessage(responseMessage)
-                    #elif 'Members Introduction' in title.text:
-                    #    loggingIn(welcomeMessage)
+                        cleaned = htmlStrippa(responseMessage)
+                        loggingIn(cleaned)
+                        textMessage(cleaned)
                     else:
-                        loggingIn(postMessage)
-                        textMessage(postMessage)
+                        cleaned = htmlStrippa(postMessage)
+                        loggingIn(cleaned)
+                        textMessage(cleaned)
 
 def hashed(x):
     return md5(x.content).hexdigest()
