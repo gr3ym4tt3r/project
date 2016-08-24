@@ -5,15 +5,15 @@ Instead, I wrote this to do it for me!
 
     D:\Projects\PythonProjects>python project.py
     [+] Found: Blow.2001.1080p.BrRip.x264.BOKUTOX.YIFY.mp4
-    [+] Renaming Blow.2001.1080p.BrRip.x264.BOKUTOX.YIFY.mp4 to Blow
+    [+] Renaming Blow.2001.1080p.BrRip.x264.BOKUTOX.YIFY.mp4 to Blow.mp4
     [+] Moving Blow to D:\Movies\Moovies\
 
     [+] Found: Daylight's.End.2016.1080p.BluRay.x264-[YTS.AG].mp4
-    [+] Renaming Daylight's.End.2016.1080p.BluRay.x264-[YTS.AG].mp4 to Daylight's End
+    [+] Renaming Daylight's.End.2016.1080p.BluRay.x264-[YTS.AG].mp4 to Daylight's End.mp4
     [+] Moving Daylight's End to D:\Movies\Moovies\
 
     [+] Found: Deadfall.Trail.2009.1080p.BluRay.x264-[YTS.AG].mp4
-    [+] Renaming Deadfall.Trail.2009.1080p.BluRay.x264-[YTS.AG].mp4 to Deadfall Trail
+    [+] Renaming Deadfall.Trail.2009.1080p.BluRay.x264-[YTS.AG].mp4 to Deadfall Trail.mp4
     [+] Moving Deadfall Trail to D:\Movies\Moovies\  
     
 # Issues 
