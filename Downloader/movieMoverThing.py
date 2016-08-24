@@ -16,7 +16,7 @@ if __name__ == '__main__':
         for movies in listdir(path):
             if movies.endswith('mp4'):
                 print('[+] Found: {}'.format(movies))
-                print('[+] Renaming {} to {}'.format(movies, clean(movies)))
+                print('[+] Renaming {} to {}.mp4'.format(movies, clean(movies)))
                 rename('{}{}'.format(path, movies), '{}{}.mp4'.format(path, clean(movies)))
                 print('[+] Moving {} to {}\n'.format(clean(movies), dest))
                 move('{}\\{}.mp4'.format(path, clean(movies)), dest)
