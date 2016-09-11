@@ -17,5 +17,5 @@ chars()
 print('[+] Quick way to zero out EAX')
 while True:
     for values in zeroEAX():
-        print('\t[+] AND EAX, {:08x}'.format(values))
+        print('\tAND EAX, {:08x}'.format(values))
     break
