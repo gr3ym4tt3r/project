@@ -18,4 +18,7 @@ This gives you the value needed to get your addy :)
     D:\Projects\PythonProjects>python project.py
     [+] Assembling for: e7ffe775
             1800188b
-    [+] Assembling for:
+    [+] Assembling for: exit
+
+    D:\Projects\PythonProjects>
+
