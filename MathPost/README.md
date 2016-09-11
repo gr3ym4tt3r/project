@@ -12,7 +12,7 @@ This shortens the time in doing so DRASTICALLY
             [+] AND EAX, 303f464a
             [+] AND EAX, 44403135
             
-#valueCALC.py
+#ValueCALC.py
 This gives you the value needed to get your addy :)   
 
     D:\Projects\PythonProjects>python project.py
