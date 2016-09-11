@@ -9,8 +9,8 @@ This shortens the time in doing so DRASTICALLY
 
     D:\Projects\PythonProjects>python project.py
     [+] Quick way to zero out EAX
-            [+] AND EAX, 303f464a
-            [+] AND EAX, 44403135
+            AND EAX, 303f464a
+            AND EAX, 44403135
             
 #ValueCALC.py
 This gives you the value needed to get your addy :)   
