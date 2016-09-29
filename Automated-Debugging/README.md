@@ -16,3 +16,4 @@ As of right now, here is what it does:
 2. If it doesn't find it, it will start it    
 3. It will search again and get the PID   
 4. After finding, it will attach itself to the process
+5. Attaches, but still learning how to run it or whatever
