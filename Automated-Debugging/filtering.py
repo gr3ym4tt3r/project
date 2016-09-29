@@ -26,8 +26,8 @@ if __name__ == '__main__':
             print('[+] Starting {}'.format(name))
             system.start_process(file)
         else:
-        	pid = checkProcesses()
-        	print('[+] Found! {} has PID {}'.format(name, pid))
-        	print('[+] Attaching to {}'.format(name))
-        	debug.attach(pid)
-        	break
+            pid = checkProcesses()
+            print('[+] Found! {} has PID {}'.format(name, pid))
+            print('[+] Attaching to {}'.format(name))
+            debug.attach(pid)
+            break
