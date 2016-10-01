@@ -2,7 +2,9 @@ from winappdbg import System, Debug
 from sys import argv, exit
 from re import compile
 
-#file = 'C:\\Users\\IEUser\\Desktop\\sipXezPhone-0.35a\\sipXezPhone.exe'
+# may need to go into main loop that way it can
+# continuously get new shots and not go off the
+# same snapshot
 
 system = System()
 debug = Debug()
