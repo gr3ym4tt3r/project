@@ -1,0 +1,120 @@
+<!--
+Peach consists of 5 main bodies:
+ 1. DataModel
+ 2. StateModel
+ 3. Agents
+ 4. Test Block
+ 5. Run Block
+
+Peach also uses 4 elements for representing data:
+ 1. String - text i.e. "Hello World!"
+ 2. Number - numerical data. Alphanumeric? Use string
+ 3. Flags - represents bit flags
+ 4. Blob - section used to represent unknown definition for. think 
+    of the 00 01 in the tftp format
+-->
+<?xml version="1.0" encoding="utf-8"?>
+<Peach xmlns="http://peachfuzzer.com/2012/Peach" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://peachfuzzer.com/2012/Peach ../peach.xsd">
+	
+	<!-- Define our file format DDL -->
+	<!--<DataModel name="Zip">
+		<String value="Hello World!" />
+	</DataModel> -->
+	<DataModel name="Zip">
+		<!-- Local File Header -->
+		<Block name="LocalFileHeader" minOccurs="1" maxOccurs="1024"/>
+		    <!--
+		    	the local file header always starts with 0x04034b50. Notice how it's written in little endian!
+		    	mutable tells the fuzzer that this value is static. 
+		    -->
+		    <String name="lfh_Signature" value="504b0304" valueType="hex" token="true" mutable="false">
+		    <!--
+		    	you can find more values in the Number section of the documentation
+		    	if you see the format, you will notice that the size is 2 bytes. due to peach using bits, 
+		    	    it'll be 16 bytes
+		    	if signed is not specified, Peach sees it as True!
+		    -->
+		    <Number name="lfh_Ver" size="16" endian="little" signed="false"/>
+		    <!--
+		    	all values are for the next value "General Purpose Bit Flag", which is 2 bytes
+		    	position is the number of arguments: 1, 2, 3, 4, etc. look at the placement child in docs
+		    	mutable is defaulted if not specified!
+		    -->
+		    <Flags name="lfh_BitFlag" size="16" endian="little" signed="false">
+		    	<Flag name="lfh_bf_Encrypted" size="1" position="0"/>
+		    	<Flag name="lfh_bf_CompMethod1" size="1" position="1"/>
+    			<Flag name="lfh_bf_CompMethod2" size="1" position="2"/>
+    			<Flag name="lfh_bf_Zeroed" size="1" position="3"/>
+    			<Flag name="lfh_bf_Deflate" size="1" position="4"/>
+    			<Flag name="lfh_bf_Patched" size="1" position="5"/>
+    			<Flag name="lfh_bf_Strong" size="1" position="6"/>
+    			<Flag name="lfh_bf_Unused1" size="1" position="7"/>
+    			<Flag name="lfh_bf_Unused2" size="1" position="8"/>
+    			<Flag name="lfh_bf_Unused3" size="1" position="9"/>
+    			<Flag name="lfh_bf_Unused4" size="1" position="10"/>
+    			<Flag name="lfh_bf_Efs" size="1" position="11"/>
+    			<Flag name="lfh_bf_Reserved1" size="1" position="12"/>
+    			<Flag name="lfh_bf_Enc_CD" size="1" position="13"/>
+    			<Flag name="lfh_bf_Reserved2" size="1" position="14"/>
+    			<Flag name="lfh_bf_Reserved3" size="1" position="15"/>
+		    </Flags>
+		    <Number name="lfh_CompMethod" size="16" endian="little" signed="false"/>
+	    </Block>
+	</DataModel>
+	<!-- Define a simple state machine that will write the file and 
+		then launch a program using the FileWriterLauncher publisher -->
+	<StateModel name="State" initialState="Initial">
+		<State name="Initial">
+
+			<!-- Write out contents of file -->
+			<Action type="output">
+				<DataModel ref="FileData" />
+			</Action>
+			
+			<!-- Close file -->
+			<Action type="close" />
+			
+			<!-- Launch the file consumer -->
+			<Action type="call" method="ScoobySnacks" publisher="Peach.Agent"/>
+		</State>
+	</StateModel>
+	
+	<!-- Setup a local agent that will monitor for faults -->
+	<Agent name="LocalAgent">
+		<Monitor class="WindowsDebugger">
+			
+			<!-- The command line to run.  Notice the filename provided matched up 
+				to what is provided below in the Publisher configuration -->
+			<Param name="CommandLine" value="c:\windows\system32\notepad.exe fuzzedfile.txt" />
+			
+			<!-- This parameter will cause the debugger to wait for an action-call in
+				the state model with a method="notepad.exe" before running
+				program.  -->
+			<Param name="StartOnCall" value="ScoobySnacks" />
+			
+		</Monitor>
+		
+		<!-- Enable heap debugging on our process as well. -->
+		<Monitor class="PageHeap">
+			<Param name="Executable" value="notepad.exe"/>
+		</Monitor>
+	</Agent>
+	
+	<Test name="Default">
+		<Agent ref="LocalAgent" />
+		
+		<StateModel ref="State"/>
+		
+		<!-- Configure our publisher with correct filename to write too -->
+		<Publisher class="File">
+			<Param name="FileName" value="fuzzedfile.txt" />
+		</Publisher>
+
+		<Logger class="Filesystem">
+			<Param name="Path" value="Logs" />
+		</Logger>
+	</Test>
+	
+</Peach>
+<!-- end -->
