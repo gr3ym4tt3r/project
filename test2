@@ -1,0 +1,44 @@
+from socket import AF_INET, SOCK_RAW, IPPROTO_ICMP
+
+# socket.sendto(packet.packet, (dstaddr, 1))
+# receiving: IcmpPacket(raw_p = self.socket.recv(1024)[20:0]) why 20??
+
+from struct import pack, unpack
+
+def checksum(source_string):
+    # I'm not too confident that this is right but testing seems to
+    # suggest that it gives the same answers as in_cksum in ping.c.
+    sum = 0
+    count_to = (len(source_string) / 2) * 2
+    count = 0
+    while count < count_to:
+        this_val = ord(source_string[count + 1])*256+ord(source_string[count])
+        sum += this_val
+        sum = sum & 0xffffffff # Necessary?
+        count = count + 2
+    if count_to < len(source_string):
+        sum = sum + ord(source_string[len(source_string) - 1])
+        sum = sum & 0xffffffff # Necessary?
+    sum = (sum >> 16) + (sum & 0xffff)
+    sum = sum + (sum >> 16)
+    answer = ~sum
+    answer = answer & 0xffff
+    # Swap bytes. Bugger me if I know why.
+    answer = answer >> 8 | (answer << 8 & 0xff00)
+    return answer
+
+#self.packet = struct.pack(packet_fmt, self.type_packet, self.code,
+#                                      self.checksum, self.identifier,
+#                                      self.seq_n, str(self.payload))
+#self.calcule_checksum()
+#self.packet = struct.pack(packet_fmt, self.type_packet, self.code,
+#                                      self.checksum, self.identifier,
+#                                      self.seq_n, str(self.payload))
+packet = pack(packetFormat,
+              typePacket,
+              code,
+              checksum,
+              identifier,
+              seq_n,
+              str(payload))
+
