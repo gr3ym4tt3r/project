@@ -1,5 +1,7 @@
 from socket import AF_INET, SOCK_RAW, IPPROTO_ICMP
 
+# sysctl -w net.ipv4.icmp_echo_ignore_all=1
+
 # socket.sendto(packet.packet, (dstaddr, 1))
 # receiving: IcmpPacket(raw_p = self.socket.recv(1024)[20:0]) why 20??
 
