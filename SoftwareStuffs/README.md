@@ -3,6 +3,7 @@
 A few things I am experimenting with. Getting information of a file and instructions and what not  
     
 Output:    
+
     X:\Project\PythonProjects>python project.py
     [+] Just another project!
     [!] Uh-oh: Usage project.py [ application ]
