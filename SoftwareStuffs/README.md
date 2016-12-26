@@ -1,6 +1,6 @@
 # Just experimenting with stuff
 
-A few things I am experimenting with. Getting information of a file and instructions and what not
+A few things I am experimenting with. Getting information of a file and instructions and what not  
 
 Output:
     X:\Project\PythonProjects>python project.py
