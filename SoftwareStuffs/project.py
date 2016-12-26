@@ -12,16 +12,19 @@ except ImportError as error:
         print('[!] pip install capstone')
         exit()
 
-IMAGE_DLL_CHARACTERISTICS_DYNAMIC_BASE  = 0x40
-
 def assemblyInstructions(firstSet, imageBase):
     md = Cs(CS_ARCH_X86, CS_MODE_32)
-    print('\n[+] First 12 instructions:')
+    print('\n[+] First few instructions:')
     for (address, size, mnemonic, op_str) in md.disasm_lite(firstSet, imageBase):
         print('\t{:08x}: {} {}'.format(address, mnemonic, op_str))
 
 def main(application):
     pe = pefile.PE(application)
+    IMAGE_DLL_CHARACTERISTICS_DYNAMIC_BASE  = 0x40
+    entrypoint = pe.OPTIONAL_HEADER.AddressOfEntryPoint
+    firstSet = pe.get_memory_mapped_image()[entrypoint: entrypoint + 24]
+    imageBase = entrypoint + pe.OPTIONAL_HEADER.ImageBase
+
     print('[+] Gathering information for {}...\n'.format(application))
     if (pe.OPTIONAL_HEADER.DllCharacteristics & IMAGE_DLL_CHARACTERISTICS_DYNAMIC_BASE):
     	print('[!] ASLR is enabled. One moment...')
@@ -29,10 +32,6 @@ def main(application):
 	    print('[+] ASLR is now disabled!')
     else:
 	    print('[+] ASLR is not enabled!')
-
-    entrypoint = pe.OPTIONAL_HEADER.AddressOfEntryPoint
-    firstSet = pe.get_memory_mapped_image()[entrypoint: entrypoint + 24]
-    imageBase = entrypoint + pe.OPTIONAL_HEADER.ImageBase
     print('[+] Entry point: {:08x}'.format(imageBase))
 
     print('[+] Contains the following {} sections:'.format(pe.FILE_HEADER.NumberOfSections))
@@ -42,10 +41,11 @@ def main(application):
 		    section.VirtualAddress, 
 		    section.Misc_VirtualSize, 
 		    section.SizeOfRawData))
+            
     assemblyInstructions(firstSet, imageBase)
 
 if __name__ == '__main__':
-    print('[+] Just another project!')
+    print('[+] Doing stuffs to stuggs because stuffs')
     try:
         application = argv[1]
     except IndexError as error:
