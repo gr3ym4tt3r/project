@@ -45,7 +45,7 @@ def main(application):
     assemblyInstructions(firstSet, imageBase)
 
 if __name__ == '__main__':
-    print('[+] Doing stuffs to stuggs because stuffs')
+    print('[+] Just another project!')
     try:
         application = argv[1]
     except IndexError as error:
