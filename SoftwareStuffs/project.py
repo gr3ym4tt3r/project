@@ -5,12 +5,7 @@ try:
     from capstone import *
 except ImportError as error:
     print('[!] Uh-oh: {}. Please install'.format(error))
-    if 'keystone' in str(error):
-        print('[!] pip install keystone-engine')
-        exit()
-    else:
-        print('[!] pip install capstone')
-        exit()
+    exit()
 
 def assemblyInstructions(firstSet, imageBase):
     md = Cs(CS_ARCH_X86, CS_MODE_32)
