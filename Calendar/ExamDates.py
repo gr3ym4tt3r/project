@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import requests, re, gi
 from datetime import datetime
 gi.require_version('Notify', '0.7')
@@ -12,7 +14,7 @@ account_sid = ''
 auth_token = ''
 
 # mdKey from your email will go right hurr
-mdKey = ''
+mdKey = '8b3d7347fe4dbf112ee67688d352836b'
 now = datetime.now()
 mon = now.month
 nex = mon+1
@@ -51,6 +53,10 @@ for link in soup.findAll('a', href=True):
         date = re.search(r'\d{4}-\d{2}-\d{2}', link['href']).group()
         date = datetime.strptime(date, '%Y-%m-%d').strftime('%B %d, %Y')
         dateList += '{}\n'.format(date)
-
+for link in soup2.findAll('a', href=True):
+    if 'exam' in link['href']:
+        date = re.search(r'\d{4}-\d{2}-\d{2}', link['href']).group()
+        date = datetime.strptime(date, '%Y-%m-%d').strftime('%B %d, %Y')
+        dateList += '{}\n'.format(date)
 writingData('available.txt', dateList)
 desktopNotification(dateList)
