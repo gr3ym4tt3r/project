@@ -14,7 +14,7 @@ account_sid = ''
 auth_token = ''
 
 # mdKey from your email will go right hurr
-mdKey = '8b3d7347fe4dbf112ee67688d352836b'
+mdKey = ''
 now = datetime.now()
 mon = now.month
 nex = mon+1
