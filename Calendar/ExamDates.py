@@ -6,15 +6,21 @@ try:
     # from twilio.rest import TwilioRestClient
     from bs4 import BeautifulSoup
 except ImportError as error:
-    print('[!] Uh-oh: {}'.format(error))
+    print('[!] EiP Overwritten with Gay Porn: {}'.format(error))
 
 account_sid = ''
 auth_token = ''
 
 # mdKey from your email will go right hurr
 mdKey = ''
+now = datetime.now()
+mon = now.month
+nex = mon+1
+datumKey = '1-{}-2017'.format(mon)
+datunKey = '1-{}-2017'.format(nex)
 dateList = ''
-payload = {'md': mdKey}
+payload = {'md':mdKey, 'datum' :datumKey}
+payload2 = {'md' :mdKey, 'datum' :datunKey} 
 
 def writingData(filename, datelist):
     with open(filename, 'w') as file:
@@ -37,8 +43,9 @@ def sendText(message):
 
 print('[+] Gathering dates')
 resp = requests.get('https://www.offensive-security.com/exam.php', params=payload)
-
 soup = BeautifulSoup(resp.content, 'lxml')
+resp2 = requests.get('https://www.offensive-security.com/exam.php', params=payload2)
+soup2 = BeautifulSoup(resp2.content, 'lxml')
 for link in soup.findAll('a', href=True):
     if 'exam' in link['href']:
         date = re.search(r'\d{4}-\d{2}-\d{2}', link['href']).group()
